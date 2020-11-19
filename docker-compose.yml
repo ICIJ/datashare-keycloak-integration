@@ -1,0 +1,129 @@
+version: '3.7'
+services:
+  keycloak:
+    image: jboss/keycloak:11.0.3
+    hostname: keycloak
+    command:
+      [
+        '-b',
+        '0.0.0.0',
+        '-Djboss.socket.binding.port-offset=1000',
+        '-Dkeycloak.migration.action=import',
+        '-Dkeycloak.migration.provider=dir',
+        '-Dkeycloak.migration.dir=/realm-config',
+        '-Dkeycloak.migration.strategy=IGNORE_EXISTING',
+      ]
+    environment:
+      KEYCLOAK_USER: admin@icij.org
+      KEYCLOAK_PASSWORD: icijpassword
+      DB_PASSWORD: kcpassword
+      DB_USER: keycloak
+      DB_ADDR: kc-postgres
+      DB_DATABASE: keycloak
+      DB_VENDOR: postgres
+    volumes:
+      - ./keycloak:/realm-config   
+    networks:
+      intranet:
+    ports:
+      - 9080:9080
+    depends_on:
+      - kc-postgres
+      - dns
+
+  datashare:
+    image: icij/datashare:8.1.2
+    hostname: datashare
+    ports:
+      - 8080:8080 
+    environment:
+      - DS_DOCKER_MOUNTED_DATA_DIR=/home/datashare/data
+      - DS_JAVA_OPTS=-Dlogback.configurationFile=/home/datashare/logback.xml
+    volumes:
+      - type: volume
+        source: datashare-data
+        target: /home/datashare/data
+      - type: volume
+        source: datashare-models
+        target: /home/datashare/dist
+      - type: bind
+        source: ./logback.xml
+        target: /home/datashare/logback.xml
+    command: '--dataSourceUrl jdbc:postgresql://ds-postgres/datashare?user=datashare&password=datasharepassword --mode SERVER --oauthClientId=datashare --oauthClientSecret=bb72e6db-5473-44ab-b950-27ffac4ade7a --oauthCallbackPath=/auth/callback --oauthAuthorizeUrl=http://keycloak:9080/auth/realms/main/protocol/openid-connect/auth --oauthTokenUrl=http://keycloak:9080/auth/realms/main/protocol/openid-connect/token --oauthApiUrl=http://keycloak:9080/auth/realms/main/protocol/openid-connect/userinfo'
+    depends_on:
+      - ds-postgres
+      - keycloak
+      - redis
+      - elasticsearch
+      - dns
+    networks:
+      intranet:  
+
+  dns:
+    image: defreitas/dns-proxy-server:2.19.0
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /etc/resolv.conf:/etc/resolv.conf
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.3.0
+    restart: on-failure
+    volumes:
+      - type: volume
+        source: elasticsearchdata
+        target: /usr/share/elasticsearch/data
+        read_only: false
+    environment:
+      - "http.host=0.0.0.0"
+      - "transport.host=0.0.0.0"
+      - "cluster.name=datashare"
+      - "discovery.type=single-node"
+      - "discovery.zen.minimum_master_nodes=1"
+      - "xpack.license.self_generated.type=basic"
+      - "http.cors.enabled=true"
+      - "http.cors.allow-origin=*"
+      - "http.cors.allow-methods=OPTIONS, HEAD, GET, POST, PUT, DELETE"
+    networks:
+      intranet:
+
+  redis:
+    image: redis:4.0.1-alpine
+    restart: on-failure
+    networks:
+      intranet:
+
+  kc-postgres:
+    image: postgres:11-alpine
+    environment:
+      - POSTGRES_USER=keycloak
+      - POSTGRES_PASSWORD=kcpassword
+      - POSTGRES_DB=keycloak
+    volumes:
+      - type: volume
+        source: kc-postgres
+        target: /var/lib/postgresql/data
+    networks:
+      intranet:
+
+  ds-postgres:
+    image: postgres:11-alpine
+    environment:
+      - POSTGRES_USER=datashare
+      - POSTGRES_PASSWORD=datasharepassword
+      - POSTGRES_DB=datashare
+    volumes:
+      - type: volume
+        source: ds-postgres
+        target: /var/lib/postgresql/data
+    networks:
+      intranet:
+
+networks:
+  intranet:
+
+volumes:
+  elasticsearchdata:
+  datashare-data:
+  datashare-models:
+  kc-postgres:
+  ds-postgres:

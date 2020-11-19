@@ -1,0 +1,51 @@
+{
+  "realm" : "main",
+  "users" : [ {
+    "id" : "b1a95e7d-db84-4fdc-bdb9-c8da8a5b3e9a",
+    "createdTimestamp" : 1605268317108,
+    "username" : "admin@icij.org",
+    "enabled" : true,
+    "totp" : false,
+    "emailVerified" : false,
+    "credentials" : [ {
+      "id" : "9681da73-453a-46d2-ac1f-ee8f849e4243",
+      "type" : "password",
+      "createdDate" : 1605268317207,
+      "secretData" : "{\"value\":\"WEi5ny4zN4++/YfXYSjI8Pk6d8vLlcbdWgpheTx2q0TZ1KWTH1jH+pX4t4/lBHflrekLTl8v5xqb9uxHkTBjOA==\",\"salt\":\"exQg1Rbdgdon5rafdzufvg==\"}",
+      "credentialData" : "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\"}"
+    } ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ ],
+    "realmRoles" : [ "offline_access", "uma_authorization", "admin" ],
+    "clientRoles" : {
+      "account" : [ "view-profile", "manage-account" ]
+    },
+    "notBefore" : 0,
+    "groups" : [ "/leak1", "/leak2" ]
+  }, {
+    "id" : "8f9546c6-2a61-434b-9853-244454bfc0fb",
+    "createdTimestamp" : 1605269749002,
+    "username" : "example",
+    "enabled" : true,
+    "totp" : false,
+    "emailVerified" : true,
+    "firstName" : "Example",
+    "lastName" : "User",
+    "email" : "example@icij.org",
+    "credentials" : [ {
+      "id" : "a264ceac-fb1d-44db-90a1-a8ff410aa0c0",
+      "type" : "password",
+      "createdDate" : 1605269805770,
+      "secretData" : "{\"value\":\"Ss1HY9GidbQ9FRFIaj3HmzGgCRQ/Ot2/QyOrJuyMIIsalUnQlamApBgE06AYrWFjdUv+X1PNvN49tp1x10CiAQ==\",\"salt\":\"dmytOTl3iGP2JS6zp9K6Ww==\"}",
+      "credentialData" : "{\"hashIterations\":27500,\"algorithm\":\"pbkdf2-sha256\"}"
+    } ],
+    "disableableCredentialTypes" : [ ],
+    "requiredActions" : [ ],
+    "realmRoles" : [ "offline_access", "uma_authorization" ],
+    "clientRoles" : {
+      "account" : [ "view-profile", "manage-account" ]
+    },
+    "notBefore" : 0,
+    "groups" : [ "/leak1" ]
+  } ]
+}
