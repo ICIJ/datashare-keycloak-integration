@@ -5,10 +5,10 @@ This repo contains a demo about how to integrate DataShare with an Oauth2 provid
 ## TL;DR
 
 ```
-cd repodir
+cd datashare-keycloak-integration
 docker-compose up -d
+docker run --rm -ti --network datashare-keycloack-integration_intranet icij/datashare:8.1.5 -m CLI --createIndex leak1
 xdg-open http://datashare:8080/
-
 ```
 
 In the browser follow these steps:
@@ -51,6 +51,8 @@ The demo deploys a Postgres server for the Keycloak persistence
 
 The demo overwrites the user's system DNS configuration to enable the user to access containers using the same address they have in the docker network. This is a requirement of the Oauth authorization flow: using the same addresses in the application and in the user browser.
 
+You can also remove all the DNS specific configuration from the `docker-compose.yml` and add to `/etc/hosts` `keycloak` and `datashare`.
+
 ## Steps to manually reproduce the demo
 
 The aim of the demo is to integrate DataShare with an Oauth provider, any other steps are omitted.
@@ -72,27 +74,31 @@ The aim of the demo is to integrate DataShare with an Oauth provider, any other 
     * Root URL: http://datashare:8080/auth/callback
 
 9. Save
-10. Set Access Type to: Confidential
+10. Set Access Type to: Confidential then save
 11. click on mappers tab
 12. Add these mappings:
-    | Name | Maper type | Token Claim Name | property| Claim Json Type |
+    | Name | Maper type | Property| Token Claim Name | Claim Json Type | Full group path |
     | - | - | - | - | - |
-    | email | User property | email | Email| string |
-    | datashare_projects | Group Membership | datashare_projects | - | - |
-    | id | User property | uid | id | string|
-    | name | User property | name | Username | string |
+    | email | User property | Email | email| string | - |
+    | datashare_projects | datashare-project | Group Membership | - | - | Off |
+    | id | User property | id | uid | string| - |
+    | name | User property | Username | name | string | - |
 13. Go to installation tab, select Keycloak OIDC JSON and write down the secret (it might look like an UUID)
 14. Change the value of DataShare's oauthClientSecret option in the docker compose file to the new secret.
 15. Get back to Keycloak administration web
-16. In the left navigation panel go to Groups and create some random groups.
-17.  In the left navigation panel go to users create a new user. 
-18. After saving go to credentials tab and set a non temporary password for the user. Save it you'll need it.
-19. Then go to the groups tab and add the user to some groups.
-20. Sign out using the upper right user menu.
-21. As we are using the default realm (master), instead of the seeded one (main) you will need to change the URLS for the following DataShare options in the docker compose file, just replace *main* with *master* in the provided URLS for:
+16. In the left navigation panel go to Groups and create some random groups. These groups will be mapped to available projects into datashare.
+17. for each created group, then create the related index with : 
+```
+docker run --rm -ti --network datashare-keycloack-integration_intranet icij/datashare:8.1.5 -m CLI --createIndex <index_name>
+```
+18.  In the left navigation panel go to users create a new user. 
+19. After saving go to credentials tab and set a non temporary password for the user. Save it you'll need it.
+20. Then go to the groups tab and add the user to some groups.
+21. Sign out using the upper right user menu.
+22. As we are using the default realm (master), instead of the seeded one (main) you will need to change the URLS for the following DataShare options in the docker compose file, just replace *main* with *master* in the provided URLS for:
   * oauthAuthorizeUrl
   * oauthTokenUrl
   * oauthApiUrl
-22. Fire up DataShare with `docker-compose up datashare`
-23. Wait for a few and open your browser with http://datashare:8080 and follow de authentication flow.
+23. Fire up DataShare with `docker-compose up datashare`
+24. Wait for a few and open your browser with http://datashare:8080 and follow de authentication flow.
 
