@@ -49,7 +49,7 @@ services:
       - type: bind
         source: ./logback.xml
         target: /home/datashare/logback.xml
-    command: '--dataSourceUrl jdbc:postgresql://ds-postgres/datashare?user=datashare&password=datasharepassword --mode SERVER --oauthClientId=datashare --oauthClientSecret=26fa15b8-88f6-43df-bd05-a94ee66ab385 --oauthCallbackPath=/auth/callback --oauthAuthorizeUrl=http://keycloak:9080/auth/realms/master/protocol/openid-connect/auth --oauthTokenUrl=http://keycloak:9080/auth/realms/master/protocol/openid-connect/token --oauthApiUrl=http://keycloak:9080/auth/realms/master/protocol/openid-connect/userinfo'
+    command: '--dataSourceUrl jdbc:postgresql://ds-postgres/datashare?user=datashare&password=datasharepassword --mode SERVER --oauthClientId=datashare --oauthClientSecret=bb72e6db-5473-44ab-b950-27ffac4ade7a --oauthCallbackPath=/auth/callback --oauthAuthorizeUrl=http://keycloak:9080/auth/realms/main/protocol/openid-connect/auth --oauthTokenUrl=http://keycloak:9080/auth/realms/main/protocol/openid-connect/token --oauthApiUrl=http://keycloak:9080/auth/realms/main/protocol/openid-connect/userinfo'
     depends_on:
       - ds-postgres
       - keycloak
