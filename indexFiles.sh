@@ -8,4 +8,4 @@ curl -s -b /tmp/icij_demo.cookie -o datashare-data/doc3.pdf https://datashare-de
 curl -s -b /tmp/icij_demo.cookie -o datashare-data/doc4.pdf https://datashare-demo.icij.org/api/luxleaks/documents/src/dc79b9fc502ac6c0667b15d416a209dc18152204073f1c48ec2474dcaadea62460c56f4cb753fa9427a0502cdd73ee4f?routing=dc79b9fc502ac6c0667b15d416a209dc18152204073f1c48ec2474dcaadea62460c56f4cb753fa9427a0502cdd73ee4f
 curl -s -b /tmp/icij_demo.cookie -o datashare-data/doc5.pdf https://datashare-demo.icij.org/api/luxleaks/documents/src/5375ec7c35df9f4640233aa58586915485f893e52e6642d900657ea9e3e1e16ffd024dc2535693bb7765a7c5ff29c742?routing=5375ec7c35df9f4640233aa58586915485f893e52e6642d900657ea9e3e1e16ffd024dc2535693bb7765a7c5ff29c742
 
-docker run --rm --network datashare-keycloak-integration_intranet -v ${PWD}/datashare-data:/home/datashare/data -ti icij/datashare:8.1.5 -m CLI -d /home/datashare/data --stages SCAN,INDEX
+docker run --rm --network datashare-keycloak-integration_intranet -v ${PWD}/datashare-data:/home/datashare/data -ti icij/datashare:8.1.5 -m CLI -d /home/datashare/data --stages SCAN,INDEX -p leak1
