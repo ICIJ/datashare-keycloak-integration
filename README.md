@@ -7,7 +7,7 @@ This repo contains a demo about how to integrate DataShare with an Oauth2 provid
 ```
 cd datashare-keycloak-integration
 docker-compose up -d
-docker run --rm -ti --network datashare-keycloack-integration_intranet icij/datashare:8.1.5 -m CLI --createIndex leak1
+docker run --rm -ti --network datashare-keycloak-integration_intranet icij/datashare:8.1.5 -m CLI --createIndex leak1
 xdg-open http://datashare:8080/
 ```
 
@@ -89,7 +89,7 @@ The aim of the demo is to integrate DataShare with an Oauth provider, any other 
 16. In the left navigation panel go to Groups and create some random groups. These groups will be mapped to available projects into datashare.
 17. for each created group, then create the related index with : 
 ```
-docker run --rm -ti --network datashare-keycloack-integration_intranet icij/datashare:8.1.5 -m CLI --createIndex <index_name>
+docker run --rm -ti --network datashare-keycloak-integration_intranet icij/datashare:8.1.5 -m CLI --createIndex <index_name>
 ```
 18.  In the left navigation panel go to users create a new user. 
 19. After saving go to credentials tab and set a non temporary password for the user. Save it you'll need it.

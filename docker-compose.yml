@@ -8,10 +8,10 @@ services:
         '-b',
         '0.0.0.0',
         '-Djboss.socket.binding.port-offset=1000',
-        #      '-Dkeycloak.migration.action=import',
-        #'-Dkeycloak.migration.provider=dir',
-        #'-Dkeycloak.migration.dir=/realm-config',
-        #'-Dkeycloak.migration.strategy=IGNORE_EXISTING',
+        '-Dkeycloak.migration.action=import',
+        '-Dkeycloak.migration.provider=dir',
+        '-Dkeycloak.migration.dir=/realm-config',
+        '-Dkeycloak.migration.strategy=IGNORE_EXISTING',
       ]
     environment:
       KEYCLOAK_USER: admin@icij.org
