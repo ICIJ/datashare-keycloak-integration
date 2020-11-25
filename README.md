@@ -1,6 +1,6 @@
-# Integrate DataShare with an Oauth provider
+# Integrate Datashare with an Oauth provider
 
-This repo contains a demo about how to integrate DataShare with an Oauth2 provider (Keycloak).
+This repo contains a demo about how to integrate Datashare with an Oauth2 provider (Keycloak).
 
 ## TL;DR
 
@@ -26,19 +26,19 @@ If you need to set your DNS server or don't trust on 8.8.8.8 DNS servers please 
 
 ## Description of the moving parts
 
-### DataShare
+### Datashare
 
-This demo deploys DataShare with its dependencies as if it were deployed in a production grade environment but does not takes any care of the security. It is also logging in debug mode, it is just a demo, **do not use in production**.
+This demo deploys Datashare with its dependencies as if it were deployed in a production grade environment but does not takes any care of the security. It is also logging in debug mode, it is just a demo, **do not use in production**.
 
 The deployed dependencies are:
 
 * Redis, for the sessions and work queues.
 * ElasticSearch, to index the documents.
-* PostgreSQL, to handle some persientence needed by DataShare
+* PostgreSQL, to handle some persientence needed by Datashare
 
-DataShare is configured via command options to use those services and Keycloak.
+Datashare is configured via command options to use those services and Keycloak.
 
-We've added `indexFiles.sh`that is downloading and indexing files from our [demo website](https://datashare-demo.icij.org). You can use it to see how datashare can index files.
+We've added `indexFiles.sh`that is downloading and indexing files from our [demo website](https://datashare-demo.icij.org). You can use it to see how Datashare can index files.
 
 ### Keycloak
 
@@ -57,7 +57,7 @@ You can also remove all the DNS specific configuration from the `docker-compose.
 
 ## Steps to manually reproduce the demo
 
-The aim of the demo is to integrate DataShare with an Oauth provider, any other steps are omitted.
+The aim of the demo is to integrate Datashare with an Oauth provider, any other steps are omitted.
 
 1. Ensure the demo is off with `docker-compose down`.
 2. Clean the environment to ensure there is no preseeded data, run:
@@ -88,7 +88,7 @@ The aim of the demo is to integrate DataShare with an Oauth provider, any other 
     | name | User property | Username | name | string | - |
     
 13. Go to installation tab, select Keycloak OIDC JSON and write down the secret (it might look like an UUID)
-14. Change the value of DataShare's oauthClientSecret option in the docker compose file to the new secret.
+14. Change the value of Datashare's oauthClientSecret option in the docker compose file to the new secret.
 15. Get back to Keycloak administration web
 16. In the left navigation panel go to Groups and create some random groups. These groups will be mapped to available projects into datashare.
 17. for each created group, then create the related index with : 
@@ -99,10 +99,10 @@ docker run --rm -ti --network datashare-keycloak-integration_intranet icij/datas
 19. After saving go to credentials tab and set a non temporary password for the user. Save it you'll need it.
 20. Then go to the groups tab and add the user to some groups.
 21. Sign out using the upper right user menu.
-22. As we are using the default realm (master), instead of the seeded one (main) you will need to change the URLS for the following DataShare options in the docker compose file, just replace *main* with *master* in the provided URLS for:
+22. As we are using the default realm (master), instead of the seeded one (main) you will need to change the URLS for the following Datashare options in the docker compose file, just replace *main* with *master* in the provided URLS for:
   * oauthAuthorizeUrl
   * oauthTokenUrl
   * oauthApiUrl
-23. Fire up DataShare with `docker-compose up datashare`
+23. Fire up Datashare with `docker-compose up datashare`
 24. Wait for a few and open your browser with http://datashare:8080 and follow de authentication flow.
 
