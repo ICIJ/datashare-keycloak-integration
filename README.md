@@ -79,12 +79,14 @@ The aim of the demo is to integrate DataShare with an Oauth provider, any other 
 10. Set Access Type to: Confidential then save
 11. click on mappers tab
 12. Add these mappings:
+
     | Name | Maper type | Property| Token Claim Name | Claim Json Type | Full group path |
-    | - | - | - | - | - |
+    | - | - | - | - | - | - |
     | email | User property | Email | email| string | - |
     | datashare_projects | datashare-project | Group Membership | - | - | Off |
     | id | User property | id | uid | string| - |
     | name | User property | Username | name | string | - |
+    
 13. Go to installation tab, select Keycloak OIDC JSON and write down the secret (it might look like an UUID)
 14. Change the value of DataShare's oauthClientSecret option in the docker compose file to the new secret.
 15. Get back to Keycloak administration web
