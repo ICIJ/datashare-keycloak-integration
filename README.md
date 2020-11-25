@@ -38,6 +38,8 @@ The deployed dependencies are:
 
 DataShare is configured via command options to use those services and Keycloak.
 
+We've added `indexFiles.sh`that is downloading and indexing files from our [demo website](https://datashare-demo.icij.org). You can use it to see how datashare can index files.
+
 ### Keycloak
 
 Is an open source identity and access management wich supports Oauth2 for single sing on.
