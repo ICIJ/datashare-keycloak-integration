@@ -32,7 +32,7 @@ services:
       - dns
 
   datashare:
-    image: icij/datashare:8.1.2
+    image: icij/datashare:8.1.5
     hostname: datashare
     ports:
       - 8080:8080 
