@@ -1,17 +1,17 @@
-version: '3.7'
+version: "3.7"
 services:
   keycloak:
     image: jboss/keycloak:11.0.3
     hostname: keycloak
     command:
       [
-        '-b',
-        '0.0.0.0',
-        '-Djboss.socket.binding.port-offset=1000',
-        '-Dkeycloak.migration.action=import',
-        '-Dkeycloak.migration.provider=dir',
-        '-Dkeycloak.migration.dir=/realm-config',
-        '-Dkeycloak.migration.strategy=IGNORE_EXISTING',
+        "-b",
+        "0.0.0.0",
+        "-Djboss.socket.binding.port-offset=1000",
+        "-Dkeycloak.migration.action=import",
+        "-Dkeycloak.migration.provider=dir",
+        "-Dkeycloak.migration.dir=/realm-config",
+        "-Dkeycloak.migration.strategy=IGNORE_EXISTING",
       ]
     environment:
       KEYCLOAK_USER: admin@icij.org
@@ -22,7 +22,7 @@ services:
       DB_DATABASE: keycloak
       DB_VENDOR: postgres
     volumes:
-      - ./keycloak:/realm-config   
+      - ./keycloak:/realm-config
     networks:
       intranet:
     ports:
@@ -32,10 +32,10 @@ services:
       - dns
 
   datashare:
-    image: icij/datashare:8.1.5
+    image: icij/datashare:8.2.2
     hostname: datashare
     ports:
-      - 8080:8080 
+      - 8080:8080
     environment:
       - DS_DOCKER_MOUNTED_DATA_DIR=/home/datashare/data
       - DS_JAVA_OPTS=-Dlogback.configurationFile=/home/datashare/logback.xml
@@ -49,7 +49,7 @@ services:
       - type: bind
         source: ./logback.xml
         target: /home/datashare/logback.xml
-    command: '--dataSourceUrl jdbc:postgresql://ds-postgres/datashare?user=datashare&password=datasharepassword --mode SERVER --oauthClientId=datashare --oauthClientSecret=bb72e6db-5473-44ab-b950-27ffac4ade7a --oauthCallbackPath=/auth/callback --oauthAuthorizeUrl=http://keycloak:9080/auth/realms/main/protocol/openid-connect/auth --oauthTokenUrl=http://keycloak:9080/auth/realms/main/protocol/openid-connect/token --oauthApiUrl=http://keycloak:9080/auth/realms/main/protocol/openid-connect/userinfo'
+    command: "--dataSourceUrl jdbc:postgresql://ds-postgres/datashare?user=datashare&password=datasharepassword --mode SERVER --oauthClientId=datashare --oauthClientSecret=bb72e6db-5473-44ab-b950-27ffac4ade7a --oauthCallbackPath=/auth/callback --oauthAuthorizeUrl=http://keycloak:9080/auth/realms/main/protocol/openid-connect/auth --oauthTokenUrl=http://keycloak:9080/auth/realms/main/protocol/openid-connect/token --oauthApiUrl=http://keycloak:9080/auth/realms/main/protocol/openid-connect/userinfo"
     depends_on:
       - ds-postgres
       - keycloak
@@ -57,7 +57,18 @@ services:
       - elasticsearch
       - dns
     networks:
-      intranet:  
+      intranet:
+
+  datashare-createindex:
+    image: icij/datashare:8.2.2
+    volumes:
+      - ./wait-for-es.sh:/usr/local/bin/wait-for-es.sh
+    entrypoint: /usr/local/bin/wait-for-es.sh
+    command: "java -DPROD_MODE=true -Djava.system.class.loader=org.icij.datashare.DynamicClassLoader -cp /home/datashare/dist/:/home/datashare/lib/datashare-dist-8.1.5-all.jar org.icij.datashare.Main -m CLI --createIndex leak1"
+    depends_on:
+      - datashare
+    networks:
+      intranet:
 
   dns:
     image: defreitas/dns-proxy-server:2.19.0
@@ -93,7 +104,7 @@ services:
       intranet:
 
   kc-postgres:
-    image: postgres:11-alpine
+    image: postgres:12-alpine
     environment:
       - POSTGRES_USER=keycloak
       - POSTGRES_PASSWORD=kcpassword
@@ -106,7 +117,7 @@ services:
       intranet:
 
   ds-postgres:
-    image: postgres:11-alpine
+    image: postgres:12-alpine
     environment:
       - POSTGRES_USER=datashare
       - POSTGRES_PASSWORD=datasharepassword
