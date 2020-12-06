@@ -7,7 +7,6 @@ This repo contains a demo about how to integrate Datashare with an Oauth2 provid
 ```
 cd datashare-keycloak-integration
 docker-compose up -d
-docker run --rm -ti --network datashare-keycloak-integration_intranet icij/datashare:8.1.5 -m CLI --createIndex leak1
 xdg-open http://datashare:8080/
 ```
 
